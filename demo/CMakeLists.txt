@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.0)
+set(PROJECT_NAME ${PROJECT_NAME}_demo)
+
+#GUI builds only when polyscope is enabled
+if(${USE_POLYSCOPE})
+        set(SHOULD_BUILD_GUI true)
+endif()
+
+if(${SHOULD_BUILD_GUI})
+        file(GLOB DEMO_FILES ${CMAKE_CURRENT_LIST_DIR}/*.cpp ${CMAKE_CURRENT_LIST_DIR}/*.hpp)
+else()
+        file(GLOB DEMO_FILES ${CMAKE_CURRENT_LIST_DIR}/main.cpp)
+endif()
+add_executable(${PROJECT_NAME} ${DEMO_FILES})
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+if(${SHOULD_BUILD_GUI})
+        target_link_libraries(${PROJECT_NAME} PUBLIC DRMSimulationModel_lib)
+        target_include_directories(${PROJECT_NAME} PUBLIC DRMSimulationModel_lib)
+else()
+        target_link_libraries(${PROJECT_NAME} PRIVATE DRMSimulationModel_lib)
+        target_include_directories(${PROJECT_NAME} PRIVATE DRMSimulationModel_lib)
+        target_include_directories(${PROJECT_NAME} PRIVATE ../deps)
+endif()

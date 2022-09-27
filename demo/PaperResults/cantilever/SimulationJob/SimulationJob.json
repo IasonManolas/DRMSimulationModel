@@ -1,0 +1,1 @@
+{"beam material":[0.30000001192092896,1000000000.0],"cross section dim":[0.014999999664723873,0.014999999664723873],"fixed vertices":[[0,[0,1,2,3,4,5]]],"forces":[[10,[0.0,0.0,5.0,0.0,0.0,0.0]]],"label":"cantilever","mesh filename":"cantilever.ply","meshLabel":"cantilever"}
