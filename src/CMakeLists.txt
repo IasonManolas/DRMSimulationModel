@@ -33,7 +33,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE matplot)
 target_link_libraries(${PROJECT_NAME} PUBLIC ThreedBeamFEA)
 target_include_directories(${PROJECT_NAME} PUBLIC ${threed-beam-fea_SOURCE_DIR})
 ##tbb
-target_link_libraries(${PROJECT_NAME} PUBLIC tbb_static)
+target_link_libraries(${PROJECT_NAME} PUBLIC tbb#[[_static]])
 ##eigen3
 target_link_libraries(${PROJECT_NAME} PUBLIC Eigen3::Eigen)
 target_include_directories(${PROJECT_NAME} PUBLIC Eigen3::Eigen)
