@@ -1,13 +1,17 @@
 cmake_minimum_required(VERSION 3.14)
 project(DRMSimulationModel_lib)
-#set(LIB_NAME DRMSimulationModel_lib)
 
 file(GLOB LIB_SOURCES *.cpp)
 file(GLOB LIB_HEADERS ../include/*.hpp)
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES} ${LIB_HEADERS})
 target_include_directories(${PROJECT_NAME} PUBLIC ../include/)
 
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+if(MSVC)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20")
+else(MSVC)
+        target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+endif(MSVC)
+
 
 add_compile_definitions(ENABLE_PARALLEL_DRM)
 
@@ -29,7 +33,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE matplot)
 target_link_libraries(${PROJECT_NAME} PUBLIC ThreedBeamFEA)
 target_include_directories(${PROJECT_NAME} PUBLIC ${threed-beam-fea_SOURCE_DIR})
 ##tbb
-target_link_libraries(${PROJECT_NAME} PRIVATE tbb_static)
+#target_link_libraries(${PROJECT_NAME} PRIVATE tbb_static)
 ##eigen3
 target_link_libraries(${PROJECT_NAME} PUBLIC Eigen3::Eigen)
 target_include_directories(${PROJECT_NAME} PUBLIC Eigen3::Eigen)
