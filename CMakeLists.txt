@@ -37,11 +37,11 @@ FetchContent_Declare(threed-beam-fea
   )
 FetchContent_MakeAvailable(threed-beam-fea)
 
-#set(TBB_BUILD_TESTS           OFF)
-#FetchContent_Declare(tbb
-#                         GIT_REPOSITORY      https://github.com/wjakob/tbb.git
-#                         GIT_TAG             master
-#  )
+set(TBB_BUILD_TESTS           OFF)
+FetchContent_Declare(tbb
+                         GIT_REPOSITORY      https://github.com/wjakob/tbb.git
+                         GIT_TAG             master
+  )
 #FetchContent_MakeAvailable(tbb)
 FetchContent_Declare(eigen
                          GIT_REPOSITORY      https://gitlab.com/libeigen/eigen.git
