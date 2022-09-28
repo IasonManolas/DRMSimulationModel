@@ -9,10 +9,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ../include/)
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-else()
-        add_compile_definitions(ENABLE_PARALLEL_DRM)
-endif()
+add_compile_definitions(ENABLE_PARALLEL_DRM)
 
 ##nlhoman json
 target_include_directories(${PROJECT_NAME} PUBLIC ../deps)
