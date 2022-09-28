@@ -42,7 +42,7 @@ FetchContent_Declare(tbb
                          GIT_REPOSITORY      https://github.com/wjakob/tbb.git
                          GIT_TAG             master
   )
-#FetchContent_MakeAvailable(tbb)
+FetchContent_MakeAvailable(tbb)
 FetchContent_Declare(eigen
                          GIT_REPOSITORY      https://gitlab.com/libeigen/eigen.git
                          GIT_TAG             master
