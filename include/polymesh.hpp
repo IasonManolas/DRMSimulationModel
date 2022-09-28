@@ -155,7 +155,7 @@ class VCGPolyMesh : public vcg::tri::TriMesh<std::vector<PVertex>,
   //      return true;
   //  }
 
-  bool save(const std::filesystem::__cxx11::path& meshFilePath =
+  bool save(const std::filesystem::path& meshFilePath =
                 std::filesystem::path()) override {
     if (meshFilePath.extension() == ".obj") {
       return saveOBJ(meshFilePath);
