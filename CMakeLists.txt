@@ -3,7 +3,7 @@ project(DRMSimulationModel
         VERSION 1.0
         LANGUAGES CXX)
 
-set(USE_POLYSCOPE true)
+set(USE_POLYSCOPE false)
 #Download external dependencies
 include(FetchContent)
 if(${USE_POLYSCOPE})
