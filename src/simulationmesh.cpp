@@ -1,6 +1,5 @@
 #include "simulationmesh.hpp"
 #include <Eigen/Dense>
-#include <wrap/nanoply/include/nanoplyWrapper.hpp>
 
 SimulationEdgeMesh::SimulationEdgeMesh() {
   elements =
