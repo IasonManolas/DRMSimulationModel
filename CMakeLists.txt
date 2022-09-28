@@ -37,6 +37,14 @@ FetchContent_Declare(threed-beam-fea
   )
 FetchContent_MakeAvailable(threed-beam-fea)
 
+set(TBB_BUILD_SHARED          OFF)
+set(TBB_BUILD_STATIC          ON)
+set(TBB_BUILD_TBBMALLOC       OFF)
+set(TBB_BUILD_TBBMALLOC_PROXY OFF)
+set(TBB_BUILD_TESTS           OFF)
+set(TBB_NO_DATE               OFF)
+set(TBB_BUILD_PYTHON          OFF)
+set(TBB_SET_SOVERSION         OFF)
 set(TBB_BUILD_TESTS           OFF)
 FetchContent_Declare(tbb
                          GIT_REPOSITORY      https://github.com/wjakob/tbb.git
