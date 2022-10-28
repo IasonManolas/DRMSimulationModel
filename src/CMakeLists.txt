@@ -29,9 +29,6 @@ target_sources(${PROJECT_NAME} PUBLIC ${vcglib_SOURCE_DIR}/wrap/ply/plylib.cpp)
 ##matplot++
 target_include_directories(${PROJECT_NAME} PRIVATE ${matplot_SOURCE_DIR}/source)
 target_link_libraries(${PROJECT_NAME} PRIVATE matplot)
-##threedbeamfea
-target_link_libraries(${PROJECT_NAME} PUBLIC ThreedBeamFEA)
-target_include_directories(${PROJECT_NAME} PUBLIC ${threed-beam-fea_SOURCE_DIR})
 ##tbb
 target_link_libraries(${PROJECT_NAME} PUBLIC tbb_static)
 ##eigen3
