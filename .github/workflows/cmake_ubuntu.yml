@@ -21,7 +21,7 @@ jobs:
     - name: Install/Update necessary packages
       run: | 
         sudo apt update;
-        sudo apt install clang-14
+        sudo apt install clang-10
     - uses: actions/checkout@v3
 
     - name: Configure CMake
