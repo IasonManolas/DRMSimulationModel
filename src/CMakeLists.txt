@@ -13,7 +13,9 @@ else(MSVC)
 endif(MSVC)
 
 
-add_compile_definitions(ENABLE_PARALLEL_DRM)
+if(CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
+        add_compile_definitions(ENABLE_PARALLEL_DRM)
+endif()
 
 ##nlhoman json
 target_include_directories(${PROJECT_NAME} PUBLIC ../deps)
