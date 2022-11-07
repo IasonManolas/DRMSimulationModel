@@ -30,7 +30,7 @@ target_sources(${PROJECT_NAME} PUBLIC ${vcglib_SOURCE_DIR}/wrap/ply/plylib.cpp)
 target_include_directories(${PROJECT_NAME} PRIVATE ${matplot_SOURCE_DIR}/source)
 target_link_libraries(${PROJECT_NAME} PRIVATE matplot)
 ##tbb
-target_link_libraries(${PROJECT_NAME} PUBLIC tbb_static)
+target_link_libraries(${PROJECT_NAME} PUBLIC tbb)
 ##eigen3
 target_link_libraries(${PROJECT_NAME} PUBLIC Eigen3::Eigen)
 target_include_directories(${PROJECT_NAME} PUBLIC Eigen3::Eigen)
