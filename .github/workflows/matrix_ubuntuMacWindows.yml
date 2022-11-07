@@ -1,55 +1,59 @@
-name: CMake
+name: build-release
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
+  release:
+    types: [published]
 
 jobs:
-  build_and_test:
-    name: Build DRMSimulationModel on ${{ matrix.os }} with ${{ matrix.compiler }}.
+  build-release:
     runs-on: ${{ matrix.os }}
+    env:
+      BUILD_TYPE: Release
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        compiler: [ clang++-14 ]
+        # specify a specific compiler to build with each OS separately
         include:
-          - os: ubuntu-latest
-            compiler: clang++-14
-            target: Linux
-
-          - os: macos-latest
-            compiler: clang++-14
-            target: Macos
-
-          - os: windows-latest
-            compiler: cl
-            target: Windows
+          - platform_name: linux
+            os: ubuntu-20.04
+            cxx: g++-10
+          - platform_name: macos
+            os: macos-10.15
+            cxx: clang++
+          # NOTE: CXX seems to be ignored on Windows, but specify it anyway for consistency
+          - platform_name: windows
+            os: windows-2019
+            cxx: msvc
 
     steps:
-    - name: Install/Update necessary packages
-      run: | 
-        sudo apt update;
-        sudo apt install clang-14
-    - uses: actions/checkout@v3
-    - run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}};
-    - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - uses: actions/checkout@v2
 
-    - name: Build
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      - name: Configure CMake
+        env:
+          CXX: ${{ matrix.cxx }}
+        # Use a bash shell so we can use the same syntax for environment variable
+        # access regardless of the host operating system
+        shell: bash
+        working-directory: ${{github.workspace}}/build
+        # Note the current convention is to use the -S and -B options here to specify source 
+        # and build directories, but this is only available with CMake 3.13 and higher.  
+        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/artifacts
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.  
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{env.BUILD_TYPE}}
-      
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: cmake --build . --config $BUILD_TYPE
+
+      - name: Install
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        # Use CMake to "install" build artifacts (only interested in CMake registered targets) to our custom artifacts directory
+        run: cmake --install . --config $BUILD_TYPE
+
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-hovercraft-is-full-of-eels_build_${{ github.run_number }}_${{ matrix.platform_name }}
+          path: ${{github.workspace}}/artifacts
