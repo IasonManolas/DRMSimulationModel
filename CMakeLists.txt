@@ -30,20 +30,23 @@ FetchContent_Declare(matplot
 	)
 FetchContent_MakeAvailable(matplot)
 
-set(TBB_BUILD_SHARED          OFF)
-set(TBB_BUILD_STATIC          ON)
-set(TBB_BUILD_TBBMALLOC       OFF)
-set(TBB_BUILD_TBBMALLOC_PROXY OFF)
-set(TBB_BUILD_TESTS           OFF)
-set(TBB_NO_DATE               OFF)
-set(TBB_BUILD_PYTHON          OFF)
-set(TBB_SET_SOVERSION         OFF)
-set(TBB_BUILD_TESTS           OFF)
-FetchContent_Declare(tbb
-	GIT_REPOSITORY      https://github.com/wjakob/tbb.git
-	GIT_TAG             master
-	)
-FetchContent_MakeAvailable(tbb)
+if(UNIX AND NOT APPLE)
+        set(TBB_BUILD_SHARED          ON)
+        set(TBB_BUILD_STATIC          OFF)
+        set(TBB_BUILD_TBBMALLOC       OFF)
+        set(TBB_BUILD_TBBMALLOC_PROXY OFF)
+        set(TBB_BUILD_TESTS           OFF)
+        set(TBB_NO_DATE               OFF)
+        set(TBB_BUILD_PYTHON          OFF)
+        set(TBB_SET_SOVERSION         OFF)
+        set(TBB_BUILD_TESTS           OFF)
+        FetchContent_Declare(tbb
+                GIT_REPOSITORY      https://github.com/wjakob/tbb.git
+                GIT_TAG             master
+                )
+        FetchContent_MakeAvailable(tbb)
+endif()
+
 FetchContent_Declare(eigen
 	GIT_REPOSITORY      https://gitlab.com/libeigen/eigen.git
 	GIT_TAG             master
