@@ -20,7 +20,7 @@ jobs:
         compiler: [ g++-10 ]
         include:
           - os: ubuntu-latest
-            compiler: g++-10
+            compiler: clang++-14
             target: Linux
 
           - os: macos-latest
