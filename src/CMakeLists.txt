@@ -13,7 +13,7 @@ else(MSVC)
 endif(MSVC)
 
 
-if(CMAKE_CXX_COMPILER_ID NOT MATCHES "AppleClang")
+if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
         add_compile_definitions(ENABLE_PARALLEL_DRM)
 endif()
 
