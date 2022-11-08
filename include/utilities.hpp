@@ -13,29 +13,29 @@
 #include <regex>
 #include <string_view>
 
-#define JSON_USE_IMPLICIT_CONVERSIONS 0
-
 #define GET_VARIABLE_NAME(Variable) (#Variable)
+NLOHMANN_JSON_NAMESPACE_BEGIN
+template <typename T>
+struct adl_serializer<std::optional<T>> {
+  static void to_json(json& j, const std::optional<T>& opt) {
+    if (opt == std::nullopt) {
+      j = nullptr;
+    } else {
+      j = *opt;  // this will call adl_serializer<T>::to_json which will
+                 // find the free function to_json in T's namespace!
+    }
+  }
 
-namespace nlohmann {
-
-template <class T>
-void to_json(nlohmann::json& j, const std::optional<T>& v) {
-  if (v.has_value())
-    j = *v;
-  else
-    j = nullptr;
-}
-
-template <class T>
-void from_json(const nlohmann::json& j, std::optional<T>& v) {
-  if (j.is_null())
-    v = std::nullopt;
-  else
-    v = j.get<T>();
-}
-
-}  // namespace nlohmann
+  static void from_json(const json& j, std::optional<T>& opt) {
+    if (j.is_null()) {
+      opt = std::nullopt;
+    } else {
+      opt = j.get<T>();  // same as above, but with
+                         // adl_serializer<T>::from_json
+    }
+  }
+};
+NLOHMANN_JSON_NAMESPACE_END
 
 namespace Utilities {
 
