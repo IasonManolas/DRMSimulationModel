@@ -3,7 +3,19 @@ c++20
 Required dependencies:Eigen,git,CMake
 Linux:libxrandr-dev, libxinerama-dev, libxcursor-dev, libxi-dev and libeigen3-dev
 Currently compiling under linux only.
-[mod5_kineticDampingPlot_withScreenshots_low.pdf](https://github.com/IasonManolas/DRMSimulationModel/files/9959836/mod5_kineticDampingPlot_withScreenshots_low.pdf)
-[model5_combined.pdf](https://github.com/IasonManolas/DRMSimulationModel/files/9959846/model5_combined.pdf)
-[model3_combined.pdf](https://github.com/IasonManolas/DRMSimulationModel/files/9959850/model3_combined.pdf)
-![cantilever](https://user-images.githubusercontent.com/17647952/200532233-beb741c3-c9ec-41ed-9417-19a90dcbdef0.png)
+
+![teaser_results](https://user-images.githubusercontent.com/17647952/200535216-e3cb3cba-a5c8-4ac4-bc71-5881746cc57e.png)
+
+---
+Author: [Iason Manolas](https://vcg.isti.cnr.it/~manolas/)
+
+If Polyscope contributes to an academic publication, cite it as:
+```bib
+@misc{manolasDRM,
+  title = {A computational tool for the analysis of 3D bending-active
+structures based on the dynamic relaxation method},
+  author = {Iason Manolas and others},
+  note = {https://github.com/IasonManolas/DRMSimulationModel},
+  year = {2022}
+}
+```
