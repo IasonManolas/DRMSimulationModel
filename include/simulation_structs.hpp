@@ -733,13 +733,12 @@ struct SimulationResults {
     pJob->save(simulationJobOutputFolderPath.string());
     const std::string filename(getLabel() + "_displacements.eigenBin");
 
-       Eigen::MatrixXd m = Utilities::toEigenMatrix(displacements);
+    Eigen::MatrixXd m = Utilities::toEigenMatrix(displacements);
     const std::filesystem::path resultsFolderPath(
         std::filesystem::path(outputFolder).append("Results"));
     std::filesystem::create_directories(resultsFolderPath);
-        Eigen::writeBinary(
-            std::filesystem::path(resultsFolderPath).append(filename).string(),
-            m);
+    Eigen::writeBinary(
+        std::filesystem::path(resultsFolderPath).append(filename).string(), m);
 
     //    nlohmann::json json;
 
