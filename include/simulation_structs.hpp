@@ -621,8 +621,6 @@ struct SimulationResults {
       rotationalDisplacementQuaternion;  // per vertex
   double internalPotentialEnergy{0};
   double executionTime{0};
-  std::vector<std::array<Vector6d, 4>>
-      perVertexInternalForces;  // axial,torsion,bending1,bending2
   std::string simulationModelUsed{""};
   std::string labelPrefix{"deformed"};
   inline static char deliminator{' '};
@@ -668,59 +666,6 @@ struct SimulationResults {
                       .string());
   }
 
-  //    void saveInternalForces(const std::filesystem::path &outputDirPath)
-  //    {
-  //        std::cout << "out to:" << outputDirPath << std::endl;
-  //        const std::filesystem::path internalForcesDirPath =
-  //        std::filesystem::path(outputDirPath);
-  //        std::filesystem::create_directories(internalForcesDirPath);
-  //        csvFile csv_axial6d(std::filesystem::path(internalForcesDirPath)
-  //                                .append("forces_axial_6d.csv"),
-  //                            true);
-  //        csvFile csv_axialMagn(std::filesystem::path(internalForcesDirPath)
-  //                                  .append("forces_axial_magn.csv"),
-  //                              true);
-  //        csvFile csv_torsion6d(std::filesystem::path(internalForcesDirPath)
-  //                                  .append("forces_torsion_6d.csv"),
-  //                              true);
-  //        csvFile csv_torsionMagn(std::filesystem::path(internalForcesDirPath)
-  //                                    .append("forces_torsion_magn.csv"),
-  //                                true);
-  //        csvFile
-  //        csv_firstBending6d(std::filesystem::path(internalForcesDirPath)
-  //                                       .append("forces_firstBending_6d.csv"),
-  //                                   true);
-  //        csvFile
-  //        csv_firstBendingMagn(std::filesystem::path(internalForcesDirPath)
-  //                                         .append("forces_firstBending_magn.csv"),
-  //                                     true);
-  //        csvFile
-  //        csv_secondBending6d(std::filesystem::path(internalForcesDirPath)
-  //                                        .append("forces_secondBending_6d.csv"),
-  //                                    true);
-  //        csvFile
-  //        csv_secondBendingMagn(std::filesystem::path(internalForcesDirPath)
-  //                                          .append("forces_secondBending_magn.csv"),
-  //                                      true);
-  //        for (const std::array<Vector6d, 4> &internalForce :
-  //        perVertexInternalForces) {
-  //            for (int dofi = 0; dofi < 6; dofi++) {
-  //                csv_axial6d << internalForce[0][dofi];
-  //                csv_torsion6d << internalForce[1][dofi];
-  //                csv_firstBending6d << internalForce[2][dofi];
-  //                csv_secondBending6d << internalForce[3][dofi];
-  //            }
-  //            csv_axial6d << endrow;
-  //            csv_torsion6d << endrow;
-  //            csv_firstBending6d << endrow;
-  //            csv_secondBending6d << endrow;
-  //            csv_axialMagn << internalForce[0].norm() << endrow;
-  //            csv_torsionMagn << internalForce[1].norm() << endrow;
-  //            csv_firstBendingMagn << internalForce[2].norm() << endrow;
-  //            csv_secondBendingMagn << internalForce[3].norm() << endrow;
-  //        }
-  //    }
-
   void save(const std::string& outputFolder = std::string()) {
     const std::filesystem::path outputFolderPath =
         outputFolder.empty() ? std::filesystem::current_path()
@@ -739,42 +684,6 @@ struct SimulationResults {
     std::filesystem::create_directories(resultsFolderPath);
     Eigen::writeBinary(
         std::filesystem::path(resultsFolderPath).append(filename).string(), m);
-
-    //    nlohmann::json json;
-
-    //    json[GET_VARIABLE_NAME(internalPotentialEnergy)] =
-    //    internalPotentialEnergy;
-    //    // Write internal forces
-    //    if (!perVertexInternalForces.empty()) {
-    //      std::vector<Vector6d> internalForces_axial(
-    //          perVertexInternalForces.size());
-    //      std::vector<Vector6d> internalForces_torsion(
-    //          perVertexInternalForces.size());
-    //      std::vector<Vector6d> internalForces_firstBending(
-    //          perVertexInternalForces.size());
-    //      std::vector<Vector6d> internalForces_secondBending(
-    //          perVertexInternalForces.size());
-    //      for (int vi = 0; vi < pJob->pMesh->VN(); vi++) {
-    //        internalForces_axial[vi] = perVertexInternalForces[vi][0];
-    //        internalForces_torsion[vi] = perVertexInternalForces[vi][1];
-    //        internalForces_firstBending[vi] = perVertexInternalForces[vi][2];
-    //        internalForces_secondBending[vi] = perVertexInternalForces[vi][3];
-    //      }
-    //      json[std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-    //      "_axial"] =
-    //          internalForces_axial;
-    //      json[std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-    //           "_torsion"] = internalForces_torsion;
-    //      json[std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-    //           "_firstBending"] = internalForces_firstBending;
-    //      json[std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-    //           "_secondBending"] = internalForces_secondBending;
-    //    }
-    //    std::filesystem::path jsonFilePath(
-    //        std::filesystem::path(resultsFolderPath).append(defaultJsonFilename));
-    //    std::ofstream jsonFile(jsonFilePath.string());
-    //    jsonFile << json;
-    //    jsonFile.close();
 
     saveDeformedModel(resultsFolderPath.string());
   }
@@ -1070,65 +979,6 @@ struct SimulationResults {
           Eigen::AngleAxisd(displacements[vi][5], Eigen::Vector3d::UnitZ());
     }
 
-    const std::filesystem::path jsonFilepath =
-        std::filesystem::path(loadFromPath).append(defaultJsonFilename);
-    if (std::filesystem::exists(jsonFilepath)) {
-      std::ifstream ifs(jsonFilepath);
-      nlohmann::json json;
-      ifs >> json;
-      //        if (json.contains(GET_VARIABLE_NAME(internalPotentialEnergy))) {
-      //            internalPotentialEnergy =
-      //            json.at(GET_VARIABLE_NAME(internalPotentialEnergy));
-      //        }
-      if (json.contains(
-              std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-              "_axial")) {
-        perVertexInternalForces.resize(pJob->pMesh->VN());
-        std::vector<Vector6d> perVertexInternalForces_axial =
-            static_cast<std::vector<Vector6d>>(json.at(
-                std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-                "_axial"));
-        for (int vi = 0; vi < pJob->pMesh->VN(); vi++) {
-          perVertexInternalForces[vi][0] = perVertexInternalForces_axial[vi];
-        }
-      }
-      if (json.contains(
-              std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-              "_torsion")) {
-        perVertexInternalForces.resize(pJob->pMesh->VN());
-        std::vector<Vector6d> perVertexInternalForces_axial =
-            static_cast<std::vector<Vector6d>>(json.at(
-                std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-                "_torsion"));
-        for (int vi = 0; vi < pJob->pMesh->VN(); vi++) {
-          perVertexInternalForces[vi][0] = perVertexInternalForces_axial[vi];
-        }
-      }
-      if (json.contains(
-              std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-              "_firstBending")) {
-        perVertexInternalForces.resize(pJob->pMesh->VN());
-        std::vector<Vector6d> perVertexInternalForces_axial =
-            static_cast<std::vector<Vector6d>>(json.at(
-                std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-                "_firstBending"));
-        for (int vi = 0; vi < pJob->pMesh->VN(); vi++) {
-          perVertexInternalForces[vi][0] = perVertexInternalForces_axial[vi];
-        }
-      }
-      if (json.contains(
-              std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-              "_secondBending")) {
-        perVertexInternalForces.resize(pJob->pMesh->VN());
-        std::vector<Vector6d> perVertexInternalForces_axial =
-            static_cast<std::vector<Vector6d>>(json.at(
-                std::string(GET_VARIABLE_NAME(perVertexInternalForces)) +
-                "_secondBending"));
-        for (int vi = 0; vi < pJob->pMesh->VN(); vi++) {
-          perVertexInternalForces[vi][0] = perVertexInternalForces_axial[vi];
-        }
-      }
-    }
     return true;
   }
 };
