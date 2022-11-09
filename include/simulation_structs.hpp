@@ -149,7 +149,9 @@ class SimulationJob {
         nodalExternalForces(ef),
         nodalForcedDisplacements(fd) {}
   SimulationJob() { pMesh = std::make_shared<SimulationEdgeMesh>(); }
-  SimulationJob(const std::string& jsonFilename) { load(jsonFilename); }
+  SimulationJob(const std::filesystem::path& jsonFilename) {
+    load(jsonFilename);
+  }
 
   bool isEmpty() {
     return constrainedVertices.empty() && nodalExternalForces.empty() &&
@@ -230,33 +232,33 @@ class SimulationJob {
     pMesh.reset();
   }
 
-  bool load(const std::string& jsonFilename,
+  bool load(const std::filesystem::path& jsonFilePath,
             const bool& shouldLoadMesh = true) {
     label = "empty_job";
     constrainedVertices.clear();
     nodalExternalForces.clear();
     nodalForcedDisplacements.clear();
     const bool beVerbose = false;
-    if (std::filesystem::path(jsonFilename).extension() != ".json") {
+    if (std::filesystem::path(jsonFilePath).extension() != ".json") {
       std::cerr << "A json file is expected as input. The given file has the "
                    "following extension:"
-                << std::filesystem::path(jsonFilename).extension() << std::endl;
+                << std::filesystem::path(jsonFilePath).extension() << std::endl;
       assert(false);
       return false;
     }
 
-    if (!std::filesystem::exists(std::filesystem::path(jsonFilename))) {
+    if (!std::filesystem::exists(std::filesystem::path(jsonFilePath))) {
       std::cerr << "The json file does not exist. Json file provided:"
-                << jsonFilename << std::endl;
+                << jsonFilePath << std::endl;
       assert(false);
       return false;
     }
 
     if (beVerbose) {
-      std::cout << "Loading json file:" << jsonFilename << std::endl;
+      std::cout << "Loading json file:" << jsonFilePath << std::endl;
     }
     nlohmann::json json;
-    std::ifstream ifs(jsonFilename);
+    std::ifstream ifs(jsonFilePath);
     ifs >> json;
 
     if (shouldLoadMesh) {
@@ -266,7 +268,7 @@ class SimulationJob {
         const std::string relativeFilepath = json[jsonLabels.meshFilename];
         const auto meshFilepath =
             std::filesystem::path(
-                std::filesystem::path(jsonFilename).parent_path())
+                std::filesystem::path(jsonFilePath).parent_path())
                 .append(relativeFilepath);
         pMesh->load(meshFilepath.string());
         pMesh->setLabel(
