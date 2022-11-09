@@ -8,6 +8,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ../include/)
 
 if(MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20")
+         SET(CMAKE_CXX_STANDARD 20)
 else(MSVC)
         target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 endif(MSVC)
