@@ -67,9 +67,10 @@ class VCGPolyMesh : public vcg::tri::TriMesh<std::vector<PVertex>,
  public:
   virtual bool load(const std::filesystem::path& meshFilePath) override {
     int mask;
-    vcg::tri::io::Importer<VCGPolyMesh>::LoadMask(meshFilePath.c_str(), mask);
+    vcg::tri::io::Importer<VCGPolyMesh>::LoadMask(meshFilePath.string().c_str(),
+                                                  mask);
     int error = vcg::tri::io::Importer<VCGPolyMesh>::Open(
-        *this, meshFilePath.c_str(), mask);
+        *this, meshFilePath.string().c_str(), mask);
     if (error != 0) {
       std::cerr << "Could not load polygonal mesh:" << meshFilePath
                 << std::endl;

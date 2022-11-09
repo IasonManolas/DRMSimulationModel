@@ -31,7 +31,7 @@ Eigen::MatrixX3d VCGEdgeMesh::getEigenEdgeNormals() const {
 bool VCGEdgeMesh::save(const std::filesystem::path& meshFilePath) {
   const std::string outputFileExtension = ".ply";
 
-  std::string filename = meshFilePath;
+  std::string filename = meshFilePath.string();
   if (filename.empty()) {
     filename = std::filesystem::current_path()
                    .append(getLabel() + outputFileExtension)
@@ -213,7 +213,7 @@ bool VCGEdgeMesh::createSpanGrid(const size_t desiredWidth,
 }
 
 bool VCGEdgeMesh::load(const std::filesystem::path& meshFilePath) {
-  std::string usedPath = meshFilePath;
+  std::string usedPath = meshFilePath.string();
   if (std::filesystem::path(meshFilePath).is_relative()) {
     usedPath = std::filesystem::absolute(meshFilePath).string();
   }
@@ -298,7 +298,7 @@ bool VCGEdgeMesh::loadUsingDefaultLoader(
   //      mask);
   constexpr bool shouldComputeBorderVertices = true;
   const int loadErrorCode = vcg::tri::io::Importer<VCGEdgeMesh>::Open(
-      *this, meshFilePath.c_str(), mask);
+      *this, meshFilePath.string().c_str(), mask);
   if (mask & vcg::tri::io::Mask::IOM_BITPOLYGONAL) {
     VCGPolyMesh polyMesh;
     polyMesh.load(meshFilePath);
