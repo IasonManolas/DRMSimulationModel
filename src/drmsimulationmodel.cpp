@@ -587,7 +587,7 @@ void DRMSimulationModel::updateResidualForces() {
           for (DoFType dofi = DoF::Ux; dofi < DoF::NumDoF; dofi++) {
             const bool isDofConstrainedFor_ev =
                 (isVertexConstrained[edgeNode.vi] &&
-                 constrainedVertices.at(vi).contains(dofi));
+                 constrainedVertices.at(vi).count(dofi) != 0);
             if (!isDofConstrainedFor_ev) {
               DifferentiateWithRespectTo dui{ev, dofi};
               // Axial force computation
@@ -685,7 +685,7 @@ void DRMSimulationModel::updateResidualForces() {
               const bool isDofConstrainedFor_refElemOtherVertex =
                   (isVertexConstrained[refElemOtherVertexNode.vi] &&
                    constrainedVertices.at(refElemOtherVertexNode.vi)
-                       .contains(dofi));
+                           .count(dofi) != 0);
               if (!isDofConstrainedFor_refElemOtherVertex) {
                 DifferentiateWithRespectTo dui{*refElemOtherVertex, dofi};
                 ////theta3_j derivative
@@ -762,8 +762,9 @@ void DRMSimulationModel::updateResidualForces() {
         pMesh->nodes._handle->data.begin(), pMesh->nodes._handle->data.end(),
         [&](Node& node) {
           Node::Forces& force = node.force;
-          if (!constrainedVertices.contains(node.vi) ||
-              !constrainedVertices.at(node.vi).contains(static_cast<int>(Uz))) {
+          if (!constrainedVertices.count(node.vi) != 0 ||
+              !constrainedVertices.at(node.vi).count(static_cast<int>(Uz)) !=
+                  0) {
             force.residual = force.residual + mSettings.initialDistortion->load;
           }
         });
@@ -795,12 +796,12 @@ void DRMSimulationModel::updateNodalExternalForces(
   double totalExternalForcesNorm = 0;
   for (const std::pair<VertexIndex, Vector6d>& nodalForce : nodalForces) {
     const VertexIndex nodeIndex = nodalForce.first;
-    const bool isNodeConstrained = fixedVertices.contains(nodeIndex);
+    const bool isNodeConstrained = fixedVertices.count(nodeIndex) != 0;
     Node& node = pMesh->nodes[nodeIndex];
     Vector6d nodalExternalForce(0);
     for (DoFType dofi = DoF::Ux; dofi < DoF::NumDoF; dofi++) {
       const bool isDofConstrained =
-          isNodeConstrained && fixedVertices.at(nodeIndex).contains(dofi);
+          isNodeConstrained && fixedVertices.at(nodeIndex).count(dofi) != 0;
       if (isDofConstrained) {
         continue;
       }
@@ -844,16 +845,16 @@ void DRMSimulationModel::computeRigidSupports() {
 #endif
       pMesh->vert.begin(), pMesh->vert.end(), [&](const VertexType& v) {
         const VertexIndex vi = pMesh->nodes[v].vi;
-        const bool isVertexConstrained = constrainedVertices.contains(vi);
+        const bool isVertexConstrained = constrainedVertices.count(vi) != 0;
         if (isVertexConstrained) {
           auto constrainedDoFType = constrainedVertices.at(vi);
           const bool hasAllDoFTypeConstrained =
-              constrainedDoFType.contains(DoF::Ux) &&
-              constrainedDoFType.contains(DoF::Uy) &&
-              constrainedDoFType.contains(DoF::Uz) &&
-              constrainedDoFType.contains(DoF::Nx) &&
-              constrainedDoFType.contains(DoF::Ny) &&
-              constrainedDoFType.contains(DoF::Nr);
+              constrainedDoFType.count(DoF::Ux) != 0 &&
+              constrainedDoFType.count(DoF::Uy) != 0 &&
+              constrainedDoFType.count(DoF::Uz) != 0 &&
+              constrainedDoFType.count(DoF::Nx) != 0 &&
+              constrainedDoFType.count(DoF::Ny) != 0 &&
+              constrainedDoFType.count(DoF::Nr) != 0;
           if (hasAllDoFTypeConstrained) {
             isRigidSupport[vi] = true;
           }
