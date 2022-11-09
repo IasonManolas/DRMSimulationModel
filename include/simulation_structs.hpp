@@ -666,7 +666,8 @@ struct SimulationResults {
                       .string());
   }
 
-  void save(const std::string& outputFolder = std::string()) {
+  void save(
+      const std::filesystem::path& outputFolder = std::filesystem::path()) {
     const std::filesystem::path outputFolderPath =
         outputFolder.empty() ? std::filesystem::current_path()
                              : std::filesystem::path(outputFolder);
