@@ -399,17 +399,17 @@ struct Vector6d : public std::array<double, 6> {
   //  NLOHMANN_DEFINE_TYPE_INTRUSIVE(Vector6d)
 };
 
-// NLOHMANN_JSON_NAMESPACE_BEGIN
-// template <>
-// struct adl_serializer<Vector6d> {
-//  static void to_json(nlohmann::json& j, const Vector6d& v) {
-//    j = static_cast<std::array<double, 6>>(v);
-//  }
-//  static void from_json(const nlohmann::json& j, Vector6d& v) {
-//    v = j.get<std::array<double, 6>>();
-//  }
-//};
-// NLOHMANN_JSON_NAMESPACE_END
+NLOHMANN_JSON_NAMESPACE_BEGIN
+template <>
+struct adl_serializer<Vector6d> {
+  static void to_json(nlohmann::json& j, const Vector6d& v) {
+    j = static_cast<std::array<double, 6>>(v);
+  }
+  static void from_json(const nlohmann::json& j, Vector6d& v) {
+    v = j.get<std::array<double, 6>>();
+  }
+};
+NLOHMANN_JSON_NAMESPACE_END
 
 namespace Utilities {
 inline Eigen::MatrixXd toEigenMatrix(const std::vector<Vector6d>& v) {
