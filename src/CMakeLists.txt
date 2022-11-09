@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(DRMSimulationModel_lib)
-set(CMAKE_CXX_STANDARD 20)
+#set(CMAKE_CXX_STANDARD 20)
 
 file(GLOB LIB_SOURCES *.cpp)
 file(GLOB LIB_HEADERS ../include/*.hpp)
@@ -10,7 +10,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ../include/)
 #if(MSVC)
 #        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20")
 #else(MSVC)
-#        target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+        target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 #endif(MSVC)
 
 if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
