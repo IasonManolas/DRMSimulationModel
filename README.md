@@ -1,6 +1,6 @@
 This repository provides a cross-platform computational tool for predicting the static equilibrium of general bending-active structures in
 the form of a network of elements using the dynamic relaxation method. The implemented method is presented in an accompanying publication: ["A computational tool for the analysis of 3D bending-active
-structures based on the dynamic relaxation method"](https://unipiit-my.sharepoint.com/:b:/g/personal/m_iason_studenti_unipi_it/EeB8B0ARbjpPhLV13I8PauEB3KjtqwkAINfavZItYT_SeA?e=YCnmec).
+structures based on the dynamic relaxation method"](https://diglib.eg.org/handle/10.2312/stag20221250).
 
 [comment]: <> (CMake Linux:libxrandr-dev, libxinerama-dev, libxcursor-dev, libxi-dev and libeigen3-dev)
 Requires: C++20,git,..
