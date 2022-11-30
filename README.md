@@ -15,7 +15,7 @@ Author: [Iason Manolas](https://vcg.isti.cnr.it/~manolas/)
 
 If this tool contributes to an academic publication, cite it as:
 ```bib
-@inproceedings {10.2312:stag.20221250,
+@inproceedings {manolas2022,
 booktitle = {Smart Tools and Applications in Graphics - Eurographics Italian Chapter Conference},
 editor = {Cabiddu, Daniela and Schneider, Teseo and Allegra, Dario and Catalano, Chiara Eva and Cherchi, Gianmarco and Scateni, Riccardo},
 title = {{A Computational Tool for the Analysis of 3D Bending-active Structures Based on the Dynamic Relaxation Method}},
