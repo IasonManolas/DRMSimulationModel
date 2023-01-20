@@ -691,7 +691,7 @@ struct SimulationResults {
     saveDeformedModel(resultsFolderPath.string());
   }
 
-  bool isEqual(const SimulationResults& otherSimulationResults, double& error) {
+  double absDifference(const SimulationResults& otherSimulationResults) {
     assert(displacements.size() == otherSimulationResults.displacements.size());
     const double translationalError = [&]() {
       Eigen::MatrixXd thisTranslations =
@@ -717,8 +717,11 @@ struct SimulationResults {
       return rotationalError;
     }();
 
-    error = translationalError + rotationalError;
-    return error < 1e-1 ? true : false;
+    return translationalError + rotationalError;
+  }
+
+  bool isEqual(const SimulationResults& otherSimulationResults, double& error) {
+    return absDifference(otherSimulationResults) < 1e-1 ? true : false;
   }
 
   // The comparison of the results happens comparing the 6-dof nodal
