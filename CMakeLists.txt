@@ -47,14 +47,17 @@ if(UNIX AND NOT APPLE)
         FetchContent_MakeAvailable(tbb)
 endif()
 
+##Eigen3
 FetchContent_Declare(eigen
 	GIT_REPOSITORY      https://gitlab.com/libeigen/eigen.git
 	GIT_TAG             master
 	)
+set(EIGEN_BUILD_DOC OFF)
+set(BUILD_TESTING OFF)
+set(EIGEN_BUILD_PKGCONFIG OFF)
 FetchContent_MakeAvailable(eigen)
-
-##Eigen3
 find_package(Eigen3 3.4 REQUIRED)
+
 if(MSVC)
 	add_compile_definitions(_HAS_STD_BYTE=0)
 endif(MSVC)
@@ -69,4 +72,6 @@ endif()
 
 if(${SHOULD_BUILD_DEMO})
 	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/demo)
+        add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests/)
 endif()
+
