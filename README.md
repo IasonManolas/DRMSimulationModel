@@ -11,8 +11,6 @@ Currently the code has been built using: Clang 10, AppleClang 13 and MSVC 19.
 ![teaser_results](https://user-images.githubusercontent.com/17647952/200535216-e3cb3cba-a5c8-4ac4-bc71-5881746cc57e.png)
 
 ---
-Author: [Iason Manolas](https://vcg.isti.cnr.it/~manolas/)
-
 If this tool contributes to an academic publication, cite it as:
 ```bib
 @inproceedings {manolas2022drm,
